@@ -74,17 +74,20 @@ shortened_summaries = []
 for i in tqdm(range(len(shortened_text))):
     result = {}
     
-    cohere_summary = co.summarize(text=shortened_text[i], length='long', format='paragraph')
-    summary = cohere_summary.summary
-    result['generated_summary'] = cohere_summary.summary
+    try:
+        cohere_summary = co.summarize(text=shortened_text[i], length='long', format='paragraph')
+        summary = cohere_summary.summary
+        result['generated_summary'] = cohere_summary.summary
+    except Exception as e:
+        print(f"An error occurred for index {i}: {str(e)}")
+        result['generated_summary'] = ""  # Append an empty value in case of an error
     
     dataset_i = sample_indices[i]
     result['gt_summary'] = dataset[dataset_i]['summary']
     shortened_summaries.append(result)
-
+    
     time.sleep(12) # only 5 calls per minute with free cohere key
-
-with open("results/shortenedtext_cohere_summaries.json", "w") as file:
+with open("../results/shortenedtext_cohere_summaries.json", "w") as file:
     json.dump(shortened_summaries, file)
     
 
