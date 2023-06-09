@@ -87,7 +87,7 @@ for i in tqdm(range(len(shortened_text))):
     shortened_summaries.append(result)
     
     time.sleep(12) # only 5 calls per minute with free cohere key
-with open("results/shortenedtext_cohere_summaries.json", "w") as file:
+with open("../results/shortenedtext_cohere_summaries.json", "w") as file:
     json.dump(shortened_summaries, file)
     
 
