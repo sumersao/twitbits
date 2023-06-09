@@ -10,7 +10,7 @@ from tqdm import tqdm
 '''
 Load dataset .json file. 
 '''
-dataset_path = 'augmented_test.json'
+dataset_path = '../augmented_test.json'
 
 with open(dataset_path) as file:
     dataset = json.load(file)
