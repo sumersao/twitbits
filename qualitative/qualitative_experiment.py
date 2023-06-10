@@ -2,15 +2,16 @@
 import random
 import pandas as pd
 import json
+import os
 
 # %%
 '''
 Load dataset .json files (baseline, best, cohere). 
 '''
 
-baseline_path = 'results/primera_baseline_complete.json'
-best_cluster_path = '../kmeans_bert_concat_complete.json' # replace with path of best performing clustering/summarizing method
-cohere_path = 'results/shortenedtext_cohere_summaries.json'
+baseline_path = '../results/primera_baseline_complete.json'
+best_cluster_path = '../../kmeans_bert_concat_complete.json' # replace with path of best performing clustering/summarizing method
+cohere_path = '../results/shortenedtext_cohere_summaries.json'
 
 with open(baseline_path) as file:
     baseline = json.load(file)
@@ -47,7 +48,7 @@ print(cohere[8]['gt_summary'])
 From list of random 200 indices, pick random n = 20 to do qualitative analysis on.
 '''
 
-df_indices = pd.read_csv('cohere_sample_indices.csv')
+df_indices = pd.read_csv('../cohere_sample_indices.csv')
 sample_indices = df_indices['Indices'].values.tolist()
 
 num_eval = 20
@@ -85,7 +86,7 @@ for index in sample_indices:
 # %%
 '''
 Qualitative experiment system. 
-For each sample, prints gold/baseline/best/cohere summaries in random order. User is then able to rank the 4 summaries blindly.
+For each sample, prints gold summary, then baseline/best/cohere summaries in random order. User is then able to rank the 4 summaries blindly.
 When user types 'continue', the labels are displayed in order for data collection. 
 Whe user types 'next', we continue to the next sample. Goes through a total of n = 20 samples for experiment completion.
 '''
@@ -94,7 +95,17 @@ print('Starting qualitative experiment.')
 print()
 
 for generated_summary in generated_summaries:
-    order = random.sample(['gold', 'baseline', 'best', 'cohere'], 4)
+
+    # First clear terminal screen
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    # Then print ground truth label
+    print('Ground Truth Summary: ') 
+    print(generated_summary['gold'])
+    print()
+
+    # Then print baseline/best/cohere summaries in random order
+    order = random.sample(['baseline', 'best', 'cohere'], 3)
     
     for item in order:
         print('Summary: ')
